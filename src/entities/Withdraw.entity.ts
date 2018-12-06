@@ -9,7 +9,7 @@ export class Withdraw extends BaseEntity {
   balanceId!: string;
 
   @Column('bigint')
-  amount: string;
+  amount: number;
 
   @CreateDateColumn()
   createdAt: Date;
