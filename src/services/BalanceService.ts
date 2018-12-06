@@ -15,7 +15,6 @@ export class BalanceService implements BalanceServiceInterface {
         @InjectRepository(Deposit) private readonly depositRepository: Repository<Deposit>,
         @InjectRepository(Withdraw) private readonly withdrawRepository: Repository<Withdraw>,
         @InjectRepository(Transfer) private readonly transferRepository: Repository<Transfer>,
-
     ){}
 
     validNumber(amount: string | number, type: string){
@@ -105,9 +104,33 @@ export class BalanceService implements BalanceServiceInterface {
         if (!withdraw){
             throw new HttpException('Withdrawal does not exist', HttpStatus.NOT_FOUND);
         }
-        else{
-            return withdraw;
-        }
+        return withdraw;
     }
     /*** TRANSFERS ***/
+
+    async createTransfer(senderBalanceId: string | number = '', receiverBalanceId: string | number = '', amount: string | number = ''){
+        const sender = await this.getBalance(senderBalanceId);
+        const receiver = await this.getBalance(receiverBalanceId);
+        const conv = this.validNumber(amount, 'amount');
+        let transfer: unknown;
+        await getManager().transaction(async manager => {
+            await sender.decreaseBalance(conv, manager);
+            await receiver.increaseBalance(conv, manager);
+            transfer = await this.transferRepository.create({senderBalanceId: sender.id, receiverBalanceId: receiver.id, amount: conv}).save();
+        });
+        return transfer as Transfer;
+    }
+
+    async getTransfer(transferId: string | number = ''){
+        const conv = this.validNumber(transferId, 'transferId');
+        const transfer = await this.transferRepository.findOne({id: conv});
+        if (!transfer){
+            throw new HttpException('Transfer does not exist', HttpStatus.NOT_FOUND);
+        }
+        return transfer;
+    }
+
+    async getTransfers(){
+        return this.transferRepository.find();
+    }
 }

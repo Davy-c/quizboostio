@@ -15,4 +15,7 @@ export interface BalanceServiceInterface {
     createWithdraw(balanceId: string | number, amount: string | number): Promise<Withdraw>;
     getWithdraw(withdrawId: string | number): Promise<Withdraw>;
     getWithdraws(): Promise<Withdraw[]>;
+    createTransfer(senderBalanceId: string | number, receiverBalanceId: string | number, amount: string | number): Promise<Transfer>;
+    getTransfer(transferId: string | number): Promise<Transfer>;
+    getTransfers(): Promise<Transfer[]>;
 }

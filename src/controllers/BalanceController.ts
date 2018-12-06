@@ -62,4 +62,18 @@ export class BalanceController{
 
   /**** TRANSFERS  *****/
 
+  @Get('/transfers')
+  async getTransfers(){
+      return this.bs.getTransfers();
+  }
+
+  @Get('/transfers/:id')
+  async getTransfer(@Param() pr){
+      return this.bs.getTransfer(pr.id);
+  }
+
+  @Post('/transfers')
+  async createTransfer(@Body() body){
+      return this.bs.createTransfer(body.senderBalanceId, body.receiverBalanceId, body.amount);
+  }
 }
