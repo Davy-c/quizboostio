@@ -16,14 +16,19 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migration:run": "ts-node -T src/utils/executeMigration.ts"
   },
   "dependencies": {
     "@nestjs/common": "^5.4.0",
     "@nestjs/core": "^5.4.0",
+    "@nestjs/typeorm": "^5.2.2",
+    "dotenv": "^6.2.0",
+    "pg": "^7.7.1",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "rxjs": "^6.2.2",
+    "typeorm": "^0.2.9",
     "typescript": "^3.0.1"
   },
   "devDependencies": {
