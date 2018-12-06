@@ -6,7 +6,7 @@ export class BalanceError extends Error {
 
 @Entity('balances')
 @Check(`"amount" >= 0`)
-export default class Balance extends BaseEntity {
+export class Balance extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: string;
 
