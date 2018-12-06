@@ -7,9 +7,12 @@ import { getManager } from 'typeorm';
 export interface BalanceServiceInterface {
     validNumber(amount: string | number, type: string): string;
     createBalance(initialAmount: string | number): Promise<Balance>;
-    getBalance(balanceId: string): Promise<Balance>;
+    getBalance(balanceId: string | number): Promise<Balance>;
     getBalances(): Promise<Balance[]>;
-    createDeposit(balanceId: string, amount: string | number): Promise<Deposit>;
-    getDeposit(depositId: string): Promise<Deposit>;
+    createDeposit(balanceId: string | number, amount: string | number): Promise<Deposit>;
+    getDeposit(depositId: string | number): Promise<Deposit>;
     getDeposits(): Promise<Deposit[]>;
+    createWithdraw(balanceId: string | number, amount: string | number): Promise<Withdraw>;
+    getWithdraw(withdrawId: string | number): Promise<Withdraw>;
+    getWithdraws(): Promise<Withdraw[]>;
 }

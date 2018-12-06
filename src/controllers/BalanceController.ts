@@ -45,6 +45,21 @@ export class BalanceController{
 
   /**** WITHDRAWALS ****/
 
+  @Get('/withdraws')
+  async getWithdraws(){
+      return this.bs.getWithdraws();
+  }
+
+  @Get('/withdraws/:id')
+  async getWithdraw(@Param() pr){
+      return this.bs.getWithdraw(pr.id);
+  }
+
+  @Post('/withdraws')
+  async createWithdraw(@Body() body){
+      return this.bs.createWithdraw(body.balanceId, body.amount);
+  }
+
   /**** TRANSFERS  *****/
 
 }

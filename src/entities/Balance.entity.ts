@@ -14,6 +14,9 @@ function getPositiveValue(amount: string | number): number{
   if (Number.isNaN(conv) || conv < 0 || !Number.isInteger(conv)){
       throw new HttpException('The given value must be a valid Integer', HttpStatus.FORBIDDEN);
   }
+  if (conv === 0){
+    throw new HttpException('Blank transfers are not allowed', HttpStatus.FORBIDDEN);
+  }
   return conv;
 }
 
@@ -45,7 +48,7 @@ export class Balance extends BaseEntity {
     if (!emanager) emanager = getManager();
     const conv = getPositiveValue(amount);
     const endTransaction = parseInt(this.amount.toString(), 10) - parseInt(conv.toString(), 10);
-    if ( endTransaction > 0){
+    if ( endTransaction >= 0){
       try{
         await emanager.createQueryBuilder(Balance, 'Entity').update(Balance)
         .set({amount: endTransaction}).where({id: this.id}).execute();

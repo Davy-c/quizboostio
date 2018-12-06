@@ -5,12 +5,17 @@ import { Repository, getManager } from 'typeorm';
 import { BalanceServiceInterface } from '../interfaces/BalanceServiceInterface';
 import { Balance } from 'src/entities/Balance.entity';
 import { Deposit } from 'src/entities/Deposit.entity';
+import { Withdraw } from 'src/entities/Withdraw.entity';
+import { Transfer } from 'src/entities/Transfer.entity';
 
 @Injectable()
 export class BalanceService implements BalanceServiceInterface {
     constructor(
         @InjectRepository(Balance) private readonly balanceRepository: Repository<Balance>,
         @InjectRepository(Deposit) private readonly depositRepository: Repository<Deposit>,
+        @InjectRepository(Withdraw) private readonly withdrawRepository: Repository<Withdraw>,
+        @InjectRepository(Transfer) private readonly transferRepository: Repository<Transfer>,
+
     ){}
 
     validNumber(amount: string | number, type: string){
@@ -33,7 +38,7 @@ export class BalanceService implements BalanceServiceInterface {
         return this.balanceRepository.create({amount: conv}).save();
     }
 
-    async getBalance(balanceId: string) {
+    async getBalance(balanceId: string | number) {
         const conv = this.validNumber(balanceId, 'balanceId');
         const balance = await this.balanceRepository.findOne({id: conv});
         if (!balance){
@@ -50,7 +55,7 @@ export class BalanceService implements BalanceServiceInterface {
 
     /*** DEPOSIT  ***/
 
-    async createDeposit(balanceId: string = '', amount: string | number = ''){
+    async createDeposit(balanceId: string | number = '', amount: string | number = ''){
         const balance = await this.getBalance(balanceId);
         const conv = this.validNumber(amount, 'amount');
 
@@ -63,10 +68,10 @@ export class BalanceService implements BalanceServiceInterface {
     }
 
     async getDeposits(){
-        return this.depositRepository.find({order: {id: 'ASC'}});
+        return this.depositRepository.find();
     }
 
-    async getDeposit(depositId: string){
+    async getDeposit(depositId: string | number){
         const conv = this.validNumber(depositId, 'Id');
         const deposit = await this.depositRepository.findOne({id: conv});
         if (!deposit){
@@ -79,5 +84,30 @@ export class BalanceService implements BalanceServiceInterface {
 
     /*** WITHDRAWAL ***/
 
+    async createWithdraw(balanceId: string | number = '', amount: string | number = ''){
+        const balance = await this.getBalance(balanceId);
+        const conv = this.validNumber(amount, 'amount');
+        let withdraw: unknown;
+        await getManager().transaction(async manager => {
+            await balance.decreaseBalance(conv, manager);
+            withdraw = await this.withdrawRepository.create({balanceId: balance.id, amount: conv}).save();
+        });
+        return withdraw as Withdraw;
+    }
+
+    async getWithdraws(){
+        return this.withdrawRepository.find();
+    }
+
+    async getWithdraw(withdrawId: string | number){
+        const conv = this.validNumber(withdrawId, 'Id');
+        const withdraw = await this.withdrawRepository.findOne({id: conv});
+        if (!withdraw){
+            throw new HttpException('Withdrawal does not exist', HttpStatus.NOT_FOUND);
+        }
+        else{
+            return withdraw;
+        }
+    }
     /*** TRANSFERS ***/
 }

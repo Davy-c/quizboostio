@@ -12,5 +12,5 @@ export class Withdraw extends BaseEntity {
   amount: string;
 
   @CreateDateColumn()
-  createdDate: Date;
+  createdAt: Date;
 }
