@@ -3,16 +3,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { ConfigModule } from './modules/ConfigModule';
 import { BalanceModule } from './modules/BalanceModule';
+import { DatabaseModule } from './modules/DatabaseModule';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(),
+    DatabaseModule,
     ConfigModule,
     BalanceModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {
-  constructor(private readonly connection: Connection) {}
-}
+export class AppModule {}

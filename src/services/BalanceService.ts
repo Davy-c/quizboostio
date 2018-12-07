@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getManager } from 'typeorm';
 
 import { BalanceServiceInterface } from '../interfaces/BalanceServiceInterface';
-import { Balance } from 'src/entities/Balance.entity';
-import { Deposit } from 'src/entities/Deposit.entity';
-import { Withdraw } from 'src/entities/Withdraw.entity';
-import { Transfer } from 'src/entities/Transfer.entity';
+import { Balance } from '../entities/Balance.entity';
+import { Deposit } from '../entities/Deposit.entity';
+import { Withdraw } from '../entities/Withdraw.entity';
+import { Transfer } from '../entities/Transfer.entity';
 
 @Injectable()
 export class BalanceService implements BalanceServiceInterface {
@@ -132,5 +132,9 @@ export class BalanceService implements BalanceServiceInterface {
 
     async getTransfers(){
         return this.transferRepository.find();
+    }
+
+    async getRepository<T>(entity): Promise<Repository<T>> {
+        return getManager().connection.getRepository(entity);
     }
 }
