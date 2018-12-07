@@ -2,7 +2,6 @@ import { Balance } from '../entities/Balance.entity';
 import { Deposit } from '../entities/Deposit.entity';
 import { Transfer } from '../entities/Transfer.entity';
 import { Withdraw } from '../entities/Withdraw.entity';
-import { getManager } from 'typeorm';
 
 export interface BalanceServiceInterface {
     validNumber(amount: string | number, type: string): string;

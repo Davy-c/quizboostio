@@ -1,13 +1,3 @@
-import config from '../config';
-import connectiondummy =  require ('./establishConnection');
-
-import { createConnection } from 'typeorm';
-import defaultOptions from './connectionOptions';
-import { Balance } from '../entities/Balance.entity';
-import { Deposit } from '../entities/Deposit.entity';
-import { Transfer } from '../entities/Transfer.entity';
-import { Withdraw } from '../entities/Withdraw.entity';
-import connectionOptions from './connectionOptions';
 import { Injectable } from '@nestjs/common';
 
 import * as fs from 'fs';

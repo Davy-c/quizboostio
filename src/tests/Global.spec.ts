@@ -1,24 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
-import { Repository, getConnection, getConnectionOptions, createConnection, Connection } from 'typeorm';
-
 import { Balance } from '../entities/Balance.entity';
-import { Deposit } from '../entities/Deposit.entity';
-import { Withdraw } from '../entities/Withdraw.entity';
-import { Transfer } from '../entities/Transfer.entity';
-
 import { ConfigModule } from '../modules/ConfigModule';
 import { BalanceModule } from '../modules/BalanceModule';
 import { DatabaseModule } from '../modules/DatabaseModule';
-
 import { TestUtils } from '../utils/TestUtils';
 import * as request from 'supertest';
 import { BalanceController } from '../controllers/BalanceController';
 import { BalanceService } from '../services/BalanceService';
 import { DatabaseService } from '../services/databaseservice';
-
-import { BalanceInterface } from '../interfaces/BalanceInterface';
-
 import { HttpException } from '@nestjs/common';
 
 describe('BANKING service', () => {
