@@ -9,6 +9,7 @@ import { BalanceController } from '../controllers/BalanceController';
 import { BalanceService } from '../services/BalanceService';
 import { DatabaseService } from '../services/databaseservice';
 import { HttpException } from '@nestjs/common';
+import 'jest';
 
 describe('BANKING service', () => {
     let utils: TestUtils;
@@ -130,18 +131,18 @@ describe('BANKING service', () => {
     });
 
     describe('/withdraws', () => {
-        it('Get all: should display 0 withdraw', async() => {
+        it('Get all: should display 0 withdraw', async () => {
             expect(await utils.countEntity('Withdraw')).toBe(0);
-        })
+        });
 
-        it('Get non-existent withdraw: should display Exception', async() => {
+        it('Get non-existent withdraw: should display Exception', async () => {
             let caught = 0;
             try{ await utils.balanceService.getWithdraw(1); }
             catch (HttpException){
                 caught = 1;
             }
             expect(caught.toString()).toMatch('1');
-        })
+        });
 
         it('Add withdraw of 100 to previous balance: should be at 400', async () => {
             let full = 0;
@@ -151,9 +152,9 @@ describe('BANKING service', () => {
             if (wit && b.amount.toString() === '400')
                 full = 1;
             expect(full.toString()).toMatch('1');
-        })
+        });
 
-        it('Add withdraw of 600: not enough fund so exception', async() => {
+        it('Add withdraw of 600: not enough fund so exception', async () => {
             let caught = 0;
             const b: Balance = await utils.getFirstEntity('Balance');
             try{ await utils.balanceService.createWithdraw(b.id, 600); }
@@ -161,17 +162,18 @@ describe('BANKING service', () => {
                 caught = 1;
             }
             expect(caught.toString()).toMatch('1');
-        })
+        });
 
-        it('Add withdraw without balance: Exception', async() =>  {
+        it('Add withdraw without balance: Exception', async () =>  {
             let caught = 0;
             try{ await utils.balanceService.createWithdraw('', 600); }
             catch (HttpException){
                 caught = 1;
             }
             expect(caught.toString()).toMatch('1');
-        })
-        it('Add non valid withdraw: Exception', async() => {
+        });
+
+        it('Add non valid withdraw: Exception', async () => {
             let caught = 0;
             const b: Balance = await utils.getFirstEntity('Balance');
             try{ await utils.balanceService.createWithdraw(b.id, 'L'); }
@@ -179,8 +181,9 @@ describe('BANKING service', () => {
                 caught = 1;
             }
             expect(caught.toString()).toMatch('1');
-        })
-        it('Add negative withdraw: Exception', async() => {
+        });
+
+        it('Add negative withdraw: Exception', async () => {
             let caught = 0;
             const b: Balance = await utils.getFirstEntity('Balance');
             try{ await utils.balanceService.createWithdraw(b.id, -200); }
@@ -188,52 +191,53 @@ describe('BANKING service', () => {
                 caught = 1;
             }
             expect(caught.toString()).toMatch('1');
-        })
+        });
 
-        it('Get all withdraw : should return one withdraw', async() => {
+        it('Get all withdraw : should return one withdraw', async () => {
             expect(await utils.countEntity('Withdraw')).toBe(1);
-        })
+        });
 
-        it('Get one withdraw : should return one withdraw', async() => {
+        it('Get one withdraw : should return one withdraw', async () => {
             expect(await utils.getFirstEntity('Withdraw')).toBeDefined();
-        })
+        });
     });
-    
+
     describe('/transfers', () => {
-        it('Get all transfers : Should display 0 transfer', async() => {
+        it('Get all transfers : Should display 0 transfer', async () => {
             expect(await utils.countEntity('Transfer')).toBe(0);
-        })
-        
-        it('Get one non-existent transfer: Should return exception', async() => {
+        });
+
+        it('Get one non-existent transfer: Should return exception', async () => {
             let caught = 0;
             try{ await utils.balanceService.getTransfer(1); }
             catch (HttpException){
                 caught = 1;
             }
             expect(caught.toString()).toMatch('1');
-        })
-        it('Transfer does not have valid balance sender : Exception', async() => {
+        });
+
+        it('Transfer does not have valid balance sender : Exception', async () => {
             let caught = 0;
             try{ await utils.balanceService.createTransfer(123, 1, 200); }
             catch (HttpException){
                 caught = 1;
             }
             expect(caught.toString()).toMatch('1');
-        })
+        });
 
-        it('Transfer does not have valid balance receiver: Exception', async() => {
+        it('Transfer does not have valid balance receiver: Exception', async () => {
             let caught = 0;
             try{ await utils.balanceService.createTransfer(1, 123, 200); }
             catch (HttpException){
                 caught = 1;
             }
             expect(caught.toString()).toMatch('1');
-        })
+        });
 
         it('Add a balance : should return a balance', async () => {
             expect(await utils.generateDummyBalance(8000)).toBeDefined();
         });
-        
+
         it('Get all : should display 2 balances', async () => {
             expect(await utils.countEntity('Balance')).toBe(2);
         });
@@ -245,7 +249,7 @@ describe('BANKING service', () => {
                 caught = 1;
             }
             expect(caught.toString()).toMatch('1');
-        })
+        });
 
         it('Sender balance can not afford to send this much : Exception', async () => {
             let caught = 0;
@@ -254,9 +258,9 @@ describe('BANKING service', () => {
                 caught = 1;
             }
             expect(caught.toString()).toMatch('1');
-        })
+        });
 
-        it('Add Transfer : one transfer & Receiver gaining 200 while Sender loosing 200', async() => {
+        it('Add Transfer : one transfer & Receiver gaining 200 while Sender loosing 200', async () => {
             let full = 0;
             const sender: Balance = await utils.balanceService.getBalance(1);
             const receiver: Balance = await utils.balanceService.getBalance(2);
@@ -272,15 +276,15 @@ describe('BANKING service', () => {
                 full = 1;
             }
             expect(full.toString()).toMatch('1');
-        })
+        });
 
         it('Get all : Should return one transfer', async () => {
             expect(await utils.countEntity('Transfer')).toBe(1);
         });
         it('Get one : should return one transfer', async () => {
             expect(await utils.getFirstEntity('Transfer')).toBeDefined();
-        })
-    })
+        });
+    });
 
     afterAll(() => {
        utils.closeConnection();
