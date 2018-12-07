@@ -6,9 +6,12 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
+    "prestart:prod": "rimraf dist && tsc",
+    "start:prod": "node dist/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "jest",
     "migration:run": "ts-node -T src/utils/executeMigration.ts"

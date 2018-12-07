@@ -1,10 +1,11 @@
+
 {
     "type": "postgres",
     "host": "localhost",
     "port": 5432,
-    "username": "dcastel",
-    "password": "root",
-    "database": "BANKING",
+    "username": "postgresql",
+    "password": "",
+    "database": "YOURDBHERE",
     "entities": ["src/**/**.entity{.ts,.js}"],
     "migrations": ["src/**/**.migration{.ts,.js}"],
     "cli": {
